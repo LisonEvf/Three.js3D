@@ -1,8 +1,18 @@
 <template>
-	<el-dialog v-model="visible" title="嵌入网站" width="600px" :close-on-click-modal="false">
-		<el-scrollbar max-height="510px">
-			<code class="code">{{ codeString }}</code>
+	<el-dialog v-model="visible" title="将当前编辑效果嵌入你的项目" width="600px" :close-on-click-modal="false">
+		<el-scrollbar max-height="400px">
+			<code class="code">{{ codeIframe }}</code>
 		</el-scrollbar>
+		<el-row :style="{ marginTop: '10px' }">
+			<el-col :span="12">
+				<el-text type="primary">容器宽度</el-text>
+				<el-input-number class="number-style" :precision="0" v-model="iframeConfig.width" />
+			</el-col>
+			<el-col :span="12">
+				<el-text type="primary">容器高度</el-text>
+				<el-input-number class="number-style" :precision="0" v-model="iframeConfig.height" />
+			</el-col>
+		</el-row>
 		<template #footer>
 			<span class="dialog-footer">
 				<el-button type="primary" class="copy-button" @click="onCopyCode">
@@ -13,28 +23,36 @@
 	</el-dialog>
 </template>
 <script setup lang="ts">
-import { vue } from '@codemirror/lang-vue';
 import { ElMessage } from "element-plus";
-import { defineExpose, ref } from 'vue'
+import { defineExpose, ref, Ref, reactive, computed } from 'vue'
 import { pageEnums } from '@/enums/pageEnums'
 import Clipboard from 'clipboard';
 
-const visible: ref<boolean> = ref(false)
-const codeString: ref<any> = ref(null)
+const visible: Ref<boolean> = ref(false)
+const codeString: Ref<any> = ref(null)
+const iframeConfig = reactive({
+	width: 400,
+	height: 300,
+})
 
-const showDialog = (code) => {
+const codeIframe = computed(() => {
+	const codeConfig = codeString.value.replace(/"([^"\\]*(\\.[^"\\]*)*)"/g, "'$1'");
+	const src = `${pageEnums.MODEL_PREIVEW}?` + 'modelConfig=' + codeConfig
+	const iframe = `<iframe  width="${iframeConfig.width}" height="${iframeConfig.height}" src="${src}" allowfullscreen></iframe>`;
+	return iframe
+})
+
+const showDialog = (code: string) => {
 	visible.value = true
-	const modelConfig = code
-	const src = `https://zhang_6666.gitee.io/three.js3d/${pageEnums.MODEL_PREIVEW}?` + 'modelConfig=' + code
-	const iframe = `<iframe  src="${src}" allowfullscreen></iframe>`;
-	codeString.value = iframe
+	codeString.value = JSON.stringify(code)
 }
 
 const onCopyCode = () => {
-	const clipboard = new Clipboard('.copy-button', { text: () => codeString.value });
-	clipboard.on('success', () => {
-		ElMessage.success('复制成功')
+	const clipboard = new Clipboard('.copy-button', { text: () => codeIframe.value });
+	clipboard.on('success', (val) => {
+		ElMessage.success('复制成功,将代码粘贴至你的项目中即可')
 		clipboard.destroy();
+		visible.value = false
 	});
 	clipboard.on('error', () => {
 		console.log('复制失败');
@@ -54,7 +72,10 @@ defineExpose({ showDialog })
 	font-family: Consolas, monospace;
 	color: #333;
 	word-wrap: break-word;
+}
 
+.number-style {
+	width: 150px !important;
 }
 </style>
 

@@ -6,7 +6,16 @@ import { resolve } from "path";
 export default defineConfig(mode => {
   const { VITE_APP_BASE_URL } = loadEnv(mode.mode, process.cwd());
   return {
-    plugins: [vue(), vueJsx()],
+    plugins: [
+      vue({
+        template: {
+          compilerOptions: {
+            isCustomElement: tag => tag === "model-viewer"
+          }
+        }
+      }),
+      vueJsx()
+    ],
     css: {
       preprocessorOptions: {
         scss: {

@@ -15,6 +15,7 @@ import "element-plus/theme-chalk/src/index.scss";
 
 import "@/style/index.scss";
 const app = createApp(App);
+app.config.compilerOptions.isCustomElement = tag => tag === "model-viewer";
 app.use(ElementPlus, { size: "small", zIndex: 3000 });
 app.use(GlobalProperties);
 app.use(GlobalComponent);

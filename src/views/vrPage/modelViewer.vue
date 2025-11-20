@@ -1,16 +1,20 @@
 <template>
   <div id="vr-page">
-    <!-- <model-viewer
+    <model-viewer
       class="model-viewer"
-      src="https://three3d-0gte3eg619c78ffd-1301256746.tcloudbaseapp.com/threejs-3dmodel-edit/threeFile/glb/glb-9.glb"
+      src="/threeFile/glb/glb-9.glb"
       ar
       shadow-intensity="1"
       camera-controls
+      min-camera-orbit="auto auto 1m"
+      max-camera-orbit="auto auto 5m"
       touch-action="pan-y"
-    ></model-viewer> -->
+    ></model-viewer>
   </div>
 </template>
-<script setup name="vrPage"></script>
+<script setup name="vrPage">
+import "@google/model-viewer";
+</script>
 <style lang="scss" scoped>
 #vr-page {
   position: relative;

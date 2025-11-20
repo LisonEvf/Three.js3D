@@ -1,6 +1,7 @@
 <template>
   <div id="vr-page">
     <model-viewer
+      ref="viewer"
       class="model-viewer"
       :src="modelSrc"
       ar
@@ -9,6 +10,7 @@
       min-camera-orbit="auto auto 0m"
       max-camera-orbit="auto auto 5m"
       touch-action="pan-y"
+       scale="0.5 0.5 0.5"
     ></model-viewer>
   </div>
 </template>
@@ -16,6 +18,8 @@
 import "@google/model-viewer";
 
 const modelSrc = `${import.meta.env.BASE_URL}threeFile/glb/glb-7.glb`;
+
+
 </script>
 <style lang="scss" scoped>
 #vr-page {

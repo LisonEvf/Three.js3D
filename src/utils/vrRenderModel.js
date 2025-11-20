@@ -54,7 +54,7 @@ class vrRenderModel {
       this.createLight();
       // 添加物体模型 TODO：初始化时需要默认一个
       const load = await this.setModel({
-        filePath: "threeFile/glb/glb-25.glb",
+        filePath: "threeFile/glb/glb-7.glb",
         fileType: "glb",
         decomposeName: "transformers_3"
       });

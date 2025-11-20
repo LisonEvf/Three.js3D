@@ -2,11 +2,11 @@
   <div id="vr-page">
     <model-viewer
       class="model-viewer"
-      src="/threeFile/glb/glb-9.glb"
+      :src="modelSrc"
       ar
       shadow-intensity="1"
       camera-controls
-      min-camera-orbit="auto auto 1m"
+      min-camera-orbit="auto auto 0m"
       max-camera-orbit="auto auto 5m"
       touch-action="pan-y"
     ></model-viewer>
@@ -14,6 +14,8 @@
 </template>
 <script setup name="vrPage">
 import "@google/model-viewer";
+
+const modelSrc = `${import.meta.env.BASE_URL}threeFile/glb/glb-7.glb`;
 </script>
 <style lang="scss" scoped>
 #vr-page {

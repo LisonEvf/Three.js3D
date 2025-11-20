@@ -206,22 +206,20 @@ export const getMousePosition = (clientX, clientY) => {
  * @param {THREE.Scene} [scene] - Three.js场景对象，如果不传则使用store中的场景
  * @returns {Array} - 返回shader材质列表，格式：[{name: '材质名称', uuid: '材质UUID'}]
  */
-export const getShaderMaterials = (scene) => {
+export const getShaderMaterials = scene => {
   const targetScene = scene || store.modelApi?.scene;
-  
+
   if (!targetScene) {
-    console.warn('场景对象不存在');
+    console.warn("场景对象不存在");
     return [];
   }
 
   const shaderMaterials = [];
 
   targetScene.traverse(object => {
-    if (object instanceof THREE.Mesh && 
-        object.userData?.type === 'Shader' && 
-        object.material) {
+    if (object instanceof THREE.Mesh && object.userData?.type === "Shader" && object.material) {
       shaderMaterials.push({
-        name: object.name || '未命名Shader',
+        name: object.name || "未命名Shader",
         onlyUuid: object.userData.onlyUuid,
         uuid: object.uuid
       });
@@ -231,3 +229,30 @@ export const getShaderMaterials = (scene) => {
   return shaderMaterials;
 };
 
+/**
+ * 打开苹果设备AR效果
+ *
+ * @param {props} Object 传入的属性值
+ * @param {listener} function 监听事件
+ * @return null
+ */
+export const activateAR = (props, listener) => {
+  const anchor = document.createElement("a");
+  anchor.setAttribute("href", `${props.iosSrc}#`);
+  anchor.style.display = "none";
+  anchor.appendChild(document.createElement("img"));
+  anchor.rel = "ar";
+  if (listener) {
+    document.body.append(anchor);
+    anchor.addEventListener(
+      "message",
+      event => {
+        if (event.data == "_apple_ar_quicklook_button_tapped") {
+          listener.dispatchEvent(new CustomEvent("quick-look-button-tapped"));
+        }
+      },
+      false
+    );
+  }
+  anchor.click();
+};

@@ -47,6 +47,12 @@ const routes = [
         name: "modelViewer",
         meta: { keepAlive: false },
         component: () => import("@/views/vrPage/modelViewer.vue")
+      },
+      {
+        path: "/iosVr",
+        name: "iosVr",
+        meta: { keepAlive: false },
+        component: () => import("@/views/vrPage/iosVr.vue")
       }
     ]
   }
